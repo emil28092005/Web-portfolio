@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Портфолио</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f13;
+      --surface: #17171f;
+      --surface-hover: #1e1e28;
+      --text: #e8e8f0;
+      --muted: #7a7a8e;
+      --accent-1: #7c6af7;
+      --accent-2: #4f9eff;
+      --accent-3: #f75c8a;
+      --accent-4: #2cba74;
+      --accent-5: #46d9a8;
+      --accent-6: #e8a24a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 0 1rem 4rem;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      padding: 4rem 1rem 3rem;
+    }
+
+    header .eyebrow {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    header h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 30%, #a89eff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    header p {
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 480px;
+      margin-inline: auto;
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── Card ── */
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1.5px;
+      background: var(--c-accent);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.5;
+      transition: opacity 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      background: var(--surface-hover);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px var(--c-accent);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-header {
+      padding: 1.5rem 1.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      background: color-mix(in srgb, var(--c-accent) 18%, transparent);
+      border: 1px solid color-mix(in srgb, var(--c-accent) 40%, transparent);
+    }
+
+    .card-tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--c-accent);
+      background: color-mix(in srgb, var(--c-accent) 12%, transparent);
+      padding: 0.25em 0.7em;
+      border-radius: 20px;
+    }
+
+    .card-body {
+      padding: 1rem 1.5rem 1.5rem;
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .card-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .card-footer .arrow {
+      color: var(--c-accent);
+      font-size: 1rem;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover .arrow { transform: translateX(4px); }
+
+    /* ── Section label ── */
+    .section-label {
+      max-width: 1100px;
+      margin: 0 auto 1rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    .section-wrap { margin-top: 2.5rem; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <span class="eyebrow">Web Development</span>
+    <h1>Портфолио</h1>
+    <p>6 лендинговых страниц — резюме и аренда недвижимости</p>
+  </header>
+
+  <!-- ── Resume section ── -->
+  <div class="section-wrap">
+    <div class="section-label">Резюме</div>
+    <div class="grid">
+
+      <a class="card" href="minimalist/" style="--c-accent: var(--accent-1)">
+        <div class="card-header">
+          <div class="card-icon">✦</div>
+          <span class="card-tag">Резюме</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Минималистичное резюме</div>
+          <div class="card-desc">Чистая типографика, лаконичный макет, максимум читаемости без лишних украшений.</div>
+        </div>
+        <div class="card-footer">
+          <span>minimalist/</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="modern-dark/" style="--c-accent: var(--accent-2)">
+        <div class="card-header">
+          <div class="card-icon">◈</div>
+          <span class="card-tag">Резюме</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Современный тёмный</div>
+          <div class="card-desc">Градиенты, glassmorphism, тёмная тема — современный tech-стиль для IT-специалистов.</div>
+        </div>
+        <div class="card-footer">
+          <span>modern-dark/</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="creative/" style="--c-accent: var(--accent-3)">
+        <div class="card-header">
+          <div class="card-icon">✸</div>
+          <span class="card-tag">Резюме</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Креативное резюме</div>
+          <div class="card-desc">Смелые акценты, нестандартная сетка, яркие детали — для творческих специальностей.</div>
+        </div>
+        <div class="card-footer">
+          <span>creative/</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ── Property section ── -->
+  <div class="section-wrap">
+    <div class="section-label">Аренда недвижимости</div>
+    <div class="grid">
+
+      <a class="card" href="dark-forest/" style="--c-accent: var(--accent-4)">
+        <div class="card-header">
+          <div class="card-icon">🌲</div>
+          <span class="card-tag">Недвижимость</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Тёмный лес</div>
+          <div class="card-desc">Тёмная атмосферная тема с лесными мотивами — аренда загородной недвижимости.</div>
+        </div>
+        <div class="card-footer">
+          <span>dark-forest/</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="eco-fresh/" style="--c-accent: var(--accent-5)">
+        <div class="card-header">
+          <div class="card-icon">🌿</div>
+          <span class="card-tag">Недвижимость</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Эко свежесть</div>
+          <div class="card-desc">Светлая эко-тема с зелёными акцентами, свежесть природы и чистый воздух.</div>
+        </div>
+        <div class="card-footer">
+          <span>eco-fresh/</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="rustic-wood/" style="--c-accent: var(--accent-6)">
+        <div class="card-header">
+          <div class="card-icon">🪵</div>
+          <span class="card-tag">Недвижимость</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Рустик Вуд</div>
+          <div class="card-desc">Тёплая деревянная эстетика, уют и природные текстуры — аренда рустикального жилья.</div>
+        </div>
+        <div class="card-footer">
+          <span>rustic-wood/</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>6 лендингов &nbsp;·&nbsp; Emil Shanaty &nbsp;·&nbsp; 2026</p>
+  </footer>
+
+</body>
+</html>

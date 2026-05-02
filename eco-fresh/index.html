@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Станция Сосновая — Аренда у озера</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:   #6b9e3f;
+      --green-d: #527a2f;
+      --green-l: #8ab85a;
+      --white:   #fafcfa;
+      --sage:    #c5d5c0;
+      --sage-l:  #dde8da;
+      --wood:    #c9a66b;
+      --wood-l:  #e0c49a;
+      --text:    #2e3a28;
+      --muted:   #6b7d65;
+      --r:       12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 68px;
+      background: rgba(250,252,250,0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(197,213,192,0.45);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-logo svg { flex-shrink: 0; }
+
+    .nav-logo-text {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    .nav-logo-sub {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+
+    .nav-cta {
+      background: var(--green);
+      color: #fff !important;
+      padding: 9px 22px;
+      border-radius: 24px;
+      font-weight: 600 !important;
+      transition: background .2s !important;
+    }
+
+    .nav-cta:hover { background: var(--green-d) !important; color: #fff !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 68px;
+      background:
+        linear-gradient(170deg, rgba(250,252,250,0.0) 0%, rgba(250,252,250,0.72) 60%, var(--white) 100%),
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(107,158,63,0.08) 0%, transparent 70%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative light circles */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -80px;
+      width: 520px; height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(197,213,192,0.38) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 60px; left: -60px;
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(107,158,63,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 80px 48px 100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sage-l);
+      color: var(--green-d);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    h1 {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 440px;
+      margin-bottom: 40px;
+      line-height: 1.75;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 32px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: var(--green-d); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--green);
+      padding: 13px 30px;
+      border-radius: 32px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      border: 1.5px solid var(--sage);
+      transition: border-color .2s, color .2s, transform .15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover { border-color: var(--green); transform: translateY(-1px); }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--sage-l);
+    }
+
+    .stat-num {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    /* hero visual */
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-img-main {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--sage-l) 0%, var(--sage) 50%, rgba(107,158,63,0.2) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-img-main::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(220deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+    }
+
+    .hero-img-icon {
+      opacity: 0.22;
+    }
+
+    .hero-float {
+      position: absolute;
+      bottom: -20px;
+      left: -24px;
+      background: var(--white);
+      border: 1px solid var(--sage-l);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(107,158,63,0.1);
+    }
+
+    .hero-float-icon {
+      width: 40px; height: 40px;
+      background: var(--sage-l);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .hero-float-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .hero-float-text span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-float2 {
+      position: absolute;
+      top: 20px;
+      right: -20px;
+      background: var(--green);
+      color: #fff;
+      border-radius: 14px;
+      padding: 14px 18px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(107,158,63,0.35);
+    }
+
+    .hero-float2 strong { font-size: 20px; font-weight: 700; display: block; line-height: 1; }
+    .hero-float2 span   { font-size: 11px; opacity: 0.85; font-weight: 500; }
+
+    /* ── SECTIONS COMMON ── */
+    section { padding: 96px 48px; max-width: 1140px; margin: 0 auto; }
+
+    .section-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(26px, 3.5vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.18;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .section-header { margin-bottom: 56px; }
+
+    /* ── GALLERY ── */
+    #gallery { background: var(--white); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .gallery-item {
+      border-radius: 18px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--sage-l) 0%, var(--sage) 100%);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: transform .25s, box-shadow .25s;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 48px rgba(107,158,63,0.15);
+    }
+
+    .gallery-item:first-child {
+      grid-column: span 2;
+      aspect-ratio: 16/9;
+    }
+
+    .gallery-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(200deg, rgba(255,255,255,0.25) 0%, transparent 55%);
+    }
+
+    .gallery-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.45;
+      position: relative;
+      z-index: 1;
+    }
+
+    .gallery-placeholder span {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green-d);
+      letter-spacing: 0.05em;
+    }
+
+    .gallery-label {
+      position: absolute;
+      bottom: 14px;
+      left: 16px;
+      background: rgba(250,252,250,0.82);
+      backdrop-filter: blur(8px);
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      z-index: 2;
+      border: 1px solid rgba(197,213,192,0.5);
+    }
+
+    /* ── FACILITIES ── */
+    #facilities {
+      background: linear-gradient(180deg, var(--sage-l) 0%, var(--white) 100%);
+      max-width: 100%;
+      padding-left: 0; padding-right: 0;
+    }
+
+    #facilities .inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 96px 48px;
+    }
+
+    .facilities-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .facility-card {
+      background: var(--white);
+      border: 1px solid var(--sage-l);
+      border-radius: var(--r);
+      padding: 32px 28px;
+      transition: transform .22s, box-shadow .22s, border-color .22s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .facility-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--green-l));
+      opacity: 0;
+      transition: opacity .22s;
+    }
+
+    .facility-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 40px rgba(107,158,63,0.12);
+      border-color: var(--sage);
+    }
+
+    .facility-card:hover::after { opacity: 1; }
+
+    .facility-icon {
+      width: 52px; height: 52px;
+      background: var(--sage-l);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      transition: background .22s;
+    }
+
+    .facility-card:hover .facility-icon { background: rgba(107,158,63,0.18); }
+
+    .facility-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .facility-card p {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .price-card {
+      background: var(--white);
+      border: 1.5px solid var(--sage-l);
+      border-radius: 20px;
+      padding: 36px 32px;
+      position: relative;
+      transition: transform .22s, box-shadow .22s;
+    }
+
+    .price-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 48px rgba(107,158,63,0.12);
+    }
+
+    .price-card.featured {
+      border-color: var(--green);
+      background: linear-gradient(160deg, rgba(107,158,63,0.04) 0%, var(--white) 100%);
+    }
+
+    .price-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 18px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+
+    .price-period {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .price-amount {
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .price-amount sup {
+      font-size: 20px;
+      vertical-align: super;
+      font-weight: 500;
+    }
+
+    .price-note {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .price-divider {
+      height: 1px;
+      background: var(--sage-l);
+      margin: 24px 0;
+    }
+
+    .price-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-bottom: 32px;
+    }
+
+    .price-features li {
+      font-size: 13.5px;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .price-features li::before {
+      content: '';
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--sage-l);
+      flex-shrink: 0;
+      margin-top: 1px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M5 9l3 3 5-5' stroke='%236b9e3f' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    }
+
+    .pricing-note {
+      margin-top: 40px;
+      padding: 20px 28px;
+      background: var(--sage-l);
+      border-radius: 14px;
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .pricing-note strong { color: var(--text); }
+
+    /* ── CONTACTS ── */
+    #contacts { background: var(--white); }
+
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .contact-block {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      width: 44px; height: 44px;
+      background: var(--sage-l);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .contact-item-text a,
+    .contact-item-text span {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .contact-item-text a:hover { color: var(--green); }
+
+    .phone-link {
+      font-size: 22px !important;
+      font-weight: 700 !important;
+      color: var(--text) !important;
+      letter-spacing: -0.01em;
+    }
+
+    .phone-link:hover { color: var(--green) !important; }
+
+    .map-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--sage-l) 0%, var(--sage) 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--sage);
+    }
+
+    .map-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(220deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+    }
+
+    .map-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      opacity: 0.5;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .map-inner span {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green-d);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      padding: 48px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .footer-sub {
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      list-style: none;
+      margin-bottom: 32px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .footer-links a:hover { color: var(--green-l); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── DECORATIVE DIVIDER ── */
+    .wave-divider {
+      width: 100%;
+      line-height: 0;
+      overflow: hidden;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px 80px; }
+      .hero-visual { display: none; }
+      section { padding: 64px 24px; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-item:first-child { grid-column: span 2; }
+      .facilities-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .contacts-grid { grid-template-columns: 1fr; }
+      footer { padding: 40px 24px; }
+    }
+
+    @media (max-width: 540px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item:first-child { grid-column: span 1; aspect-ratio: 4/3; }
+      .facilities-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="16" fill="#c5d5c0"/>
+      <path d="M16 6 L11 16 H21 Z" fill="#6b9e3f"/>
+      <path d="M16 11 L9 22 H23 Z" fill="#527a2f"/>
+      <rect x="14" y="22" width="4" height="4" rx="1" fill="#c9a66b"/>
+    </svg>
+    <div>
+      <div class="nav-logo-text">Станция Сосновая</div>
+      <div class="nav-logo-sub">Переславль-Залесский</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#gallery">Фото</a></li>
+    <li><a href="#facilities">Удобства</a></li>
+    <li><a href="#pricing">Цены</a></li>
+    <li><a href="#contacts" class="nav-cta">Забронировать</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">Аренда у озера</div>
+      <h1>Станция<br /><em>Сосновая</em></h1>
+      <p class="hero-desc">
+        Уединённый отдых среди соснового леса на берегу Плещеева озера под Переславлем-Залесским.
+        Свежий воздух, тишина и тёплая компания природы.
+      </p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn-primary">Посмотреть цены</a>
+        <a href="#gallery" class="btn-outline">Смотреть фото</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">15 мин</div>
+          <div class="stat-lbl">до центра города</div>
+        </div>
+        <div>
+          <div class="stat-num">2 га</div>
+          <div class="stat-lbl">природной территории</div>
+        </div>
+        <div>
+          <div class="stat-num">до 20</div>
+          <div class="stat-lbl">гостей одновременно</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-img-main">
+        <svg class="hero-img-icon" width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M60 10 L38 52 H82 Z" fill="#6b9e3f"/>
+          <path d="M60 28 L32 68 H88 Z" fill="#527a2f"/>
+          <path d="M60 46 L26 84 H94 Z" fill="#6b9e3f"/>
+          <rect x="52" y="84" width="16" height="18" rx="3" fill="#c9a66b"/>
+          <ellipse cx="60" cy="108" rx="22" ry="4" fill="rgba(0,0,0,0.08)"/>
+        </svg>
+      </div>
+      <div class="hero-float">
+        <div class="hero-float-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 2a7 7 0 110 14A7 7 0 0111 2z" stroke="#6b9e3f" stroke-width="1.6"/>
+            <path d="M3 20c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="#6b9e3f" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="hero-float-text">
+          <strong>Семейный отдых</strong>
+          <span>Место для всей семьи</span>
+        </div>
+      </div>
+      <div class="hero-float2">
+        <strong>5★</strong>
+        <span>Рейтинг гостей</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-header">
+    <div class="section-tag">Галерея</div>
+    <h2>Виды и пространства</h2>
+    <p class="section-sub">Сосновый бор, берег озера, уютный двор — всё для полного отдыха от городской суеты.</p>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect x="4" y="10" width="40" height="28" rx="4" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="8" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="3" fill="#527a2f"/>
+          <path d="M4 30l10-10 8 8 6-6 10 10" stroke="#527a2f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Панорама участка</span>
+      </div>
+      <div class="gallery-label">Главный вид</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+          <rect x="4" y="10" width="40" height="28" rx="4" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="8" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="3" fill="#527a2f"/>
+        </svg>
+        <span>Лесная тропа</span>
+      </div>
+      <div class="gallery-label">Лес</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+          <rect x="4" y="10" width="40" height="28" rx="4" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="8" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="3" fill="#527a2f"/>
+        </svg>
+        <span>Берег Плещеева</span>
+      </div>
+      <div class="gallery-label">Озеро</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+          <rect x="4" y="10" width="40" height="28" rx="4" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="8" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="3" fill="#527a2f"/>
+        </svg>
+        <span>Беседка</span>
+      </div>
+      <div class="gallery-label">Беседка</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+          <rect x="4" y="10" width="40" height="28" rx="4" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="8" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="3" fill="#527a2f"/>
+        </svg>
+        <span>Зона барбекю</span>
+      </div>
+      <div class="gallery-label">Барбекю</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+          <rect x="4" y="10" width="40" height="28" rx="4" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="8" stroke="#527a2f" stroke-width="2"/>
+          <circle cx="24" cy="24" r="3" fill="#527a2f"/>
+        </svg>
+        <span>Детская площадка</span>
+      </div>
+      <div class="gallery-label">Для детей</div>
+    </div>
+  </div>
+</section>
+
+<!-- FACILITIES -->
+<div id="facilities">
+  <div class="inner">
+    <div class="section-header">
+      <div class="section-tag">Инфраструктура</div>
+      <h2>Всё для комфортного отдыха</h2>
+      <p class="section-sub">Продуманная территория, где каждая деталь создаёт атмосферу уюта и свободы.</p>
+    </div>
+
+    <div class="facilities-grid">
+      <div class="facility-card">
+        <div class="facility-icon">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <path d="M3 20V10l10-6 10 6v10" stroke="#6b9e3f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 20h20" stroke="#6b9e3f" stroke-width="1.8" stroke-linecap="round"/>
+            <rect x="9" y="13" width="8" height="7" rx="1" stroke="#6b9e3f" stroke-width="1.6"/>
+          </svg>
+        </div>
+        <h3>Уютная беседка</h3>
+        <p>Просторная крытая беседка с большим столом и лавками — идеальное место для застолий в любую погоду.</p>
+      </div>
+
+      <div class="facility-card">
+        <div class="facility-icon">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <rect x="4" y="14" width="18" height="8" rx="2" stroke="#6b9e3f" stroke-width="1.8"/>
+            <path d="M8 14V10a5 5 0 0110 0v4" stroke="#6b9e3f" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M13 4v3M9 5.5l1.5 2.5M17 5.5l-1.5 2.5" stroke="#c9a66b" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Зона барбекю</h3>
+        <p>Мангал и гриль с зоной отдыха, стол и лавки рядом. Угли и розжиг в комплекте — только привезите мясо.</p>
+      </div>
+
+      <div class="facility-card">
+        <div class="facility-icon">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <circle cx="8" cy="16" r="3" stroke="#6b9e3f" stroke-width="1.8"/>
+            <circle cx="18" cy="16" r="3" stroke="#6b9e3f" stroke-width="1.8"/>
+            <path d="M5 16v-4a3 3 0 013-3h10a3 3 0 013 3v4" stroke="#6b9e3f" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M13 9V6M10 7l1.5 2M16 7l-1.5 2" stroke="#6b9e3f" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Детская площадка</h3>
+        <p>Качели, горка и лазалка в тени сосен. Мягкое покрытие, безопасное пространство для маленьких гостей.</p>
+      </div>
+
+      <div class="facility-card">
+        <div class="facility-icon">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <rect x="3" y="12" width="20" height="10" rx="2" stroke="#6b9e3f" stroke-width="1.8"/>
+            <path d="M7 12V9a6 6 0 0112 0v3" stroke="#6b9e3f" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="13" cy="17" r="2" stroke="#6b9e3f" stroke-width="1.6"/>
+            <path d="M6 5h14" stroke="#c9a66b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 2"/>
+          </svg>
+        </div>
+        <h3>Парковка</h3>
+        <p>Вместительная закрытая парковка на территории. Место для нескольких автомобилей, въезд со шлагбаумом.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-header">
+    <div class="section-tag">Цены</div>
+    <h2>Прозрачные тарифы</h2>
+    <p class="section-sub">Без скрытых доплат. Стоимость включает все базовые удобства и уборку.</p>
+  </div>
+
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-period">Будни</div>
+      <div class="price-amount"><sup>от </sup>3 500 <span style="font-size:18px;font-weight:400;color:var(--muted)">₽</span></div>
+      <div class="price-note">за сутки · пн–чт</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>Вся территория в аренду</li>
+        <li>Беседка и зона барбекю</li>
+        <li>Детская площадка</li>
+        <li>Парковка включена</li>
+        <li>До 10 гостей</li>
+      </ul>
+      <a href="#contacts" class="btn-outline" style="display:block;text-align:center;">Узнать детали</a>
+    </div>
+
+    <div class="price-card featured">
+      <div class="price-badge">Популярный</div>
+      <div class="price-period">Выходные</div>
+      <div class="price-amount"><sup>от </sup>5 500 <span style="font-size:18px;font-weight:400;color:var(--muted)">₽</span></div>
+      <div class="price-note">за сутки · пт–вс</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>Вся территория в аренду</li>
+        <li>Беседка и зона барбекю</li>
+        <li>Детская площадка</li>
+        <li>Парковка включена</li>
+        <li>До 20 гостей</li>
+      </ul>
+      <a href="#contacts" class="btn-primary" style="display:block;text-align:center;">Забронировать</a>
+    </div>
+
+    <div class="price-card">
+      <div class="price-period">Мероприятие</div>
+      <div class="price-amount"><sup>от </sup>12 000 <span style="font-size:18px;font-weight:400;color:var(--muted)">₽</span></div>
+      <div class="price-note">за день · любой день недели</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>День рождения / корпоратив</li>
+        <li>Полная территория</li>
+        <li>Помощь с организацией</li>
+        <li>Гибкое время аренды</li>
+        <li>До 40 гостей</li>
+      </ul>
+      <a href="#contacts" class="btn-outline" style="display:block;text-align:center;">Обсудить детали</a>
+    </div>
+  </div>
+
+  <div class="pricing-note">
+    <strong>Залог:</strong> при бронировании вносится предоплата 30% от стоимости аренды. Полная оплата — в день заезда.
+    Минимальный срок аренды — 1 сутки. Заезд с 14:00, выезд до 12:00.
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section id="contacts">
+  <div class="section-header">
+    <div class="section-tag">Контакты</div>
+    <h2>Свяжитесь с нами</h2>
+    <p class="section-sub">Ответим на вопросы и поможем выбрать подходящую дату для вашего отдыха.</p>
+  </div>
+
+  <div class="contacts-grid">
+    <div class="contact-block">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M3 5a2 2 0 012-2h2.28a1 1 0 01.95.68l1.1 3.3a1 1 0 01-.23 1.04L7.7 9.38C8.93 11.87 10.13 13.07 12.62 14.3l.36-.41a1 1 0 011.04-.23l3.3 1.1a1 1 0 01.68.95V17a2 2 0 01-2 2C7.44 19 3 14.56 3 9V5z" stroke="#6b9e3f" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="contact-item-text">
+          <strong>Телефон</strong>
+          <a href="tel:+7XXXXXXXXXX" class="phone-link">+7 (XXX) XXX-XX-XX</a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <rect x="2" y="4" width="18" height="14" rx="3" stroke="#6b9e3f" stroke-width="1.7"/>
+            <path d="M2 8l9 6 9-6" stroke="#6b9e3f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="contact-item-text">
+          <strong>Email</strong>
+          <a href="mailto:info@sosnovaya.ru"><span>info@sosnovaya.ru</span></a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 2a7 7 0 00-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 00-7-7z" stroke="#6b9e3f" stroke-width="1.7"/>
+            <circle cx="11" cy="9" r="2.5" stroke="#6b9e3f" stroke-width="1.7"/>
+          </svg>
+        </div>
+        <div class="contact-item-text">
+          <strong>Адрес</strong>
+          <span>Ярославская область,<br />Переславль-Залесский район,<br />поблизости от Плещеева озера</span>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="9" stroke="#6b9e3f" stroke-width="1.7"/>
+            <path d="M11 6v5l3 3" stroke="#6b9e3f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="contact-item-text">
+          <strong>Режим работы</strong>
+          <span>Ежедневно · 09:00–21:00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-placeholder">
+      <div class="map-inner">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <path d="M24 6a14 14 0 00-14 14c0 10.5 14 26 14 26s14-15.5 14-26A14 14 0 0024 6z" stroke="#527a2f" stroke-width="2.2"/>
+          <circle cx="24" cy="20" r="5" stroke="#527a2f" stroke-width="2.2"/>
+          <path d="M8 40h32" stroke="#527a2f" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="3 3"/>
+        </svg>
+        <span>Карта проезда<br />будет здесь</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Станция Сосновая</div>
+  <div class="footer-sub">Аренда загородной территории у Плещеева озера · Переславль-Залесский</div>
+  <ul class="footer-links">
+    <li><a href="#gallery">Фото</a></li>
+    <li><a href="#facilities">Удобства</a></li>
+    <li><a href="#pricing">Цены</a></li>
+    <li><a href="#contacts">Контакты</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 Станция Сосновая. Все права защищены.</div>
+</footer>
+
+</body>
+</html>

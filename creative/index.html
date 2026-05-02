@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Morgan — Creative Technologist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --c-orange:#ff5c00;
+      --c-pink:#ff006e;
+      --c-purple:#8338ec;
+      --c-blue:#3a86ff;
+      --c-cream:#fff8f0;
+      --c-ink:#0d1117;
+      --c-gray:#6b7280;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',sans-serif;
+      background:var(--c-cream);
+      color:var(--c-ink);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+    .font-display{font-family:'Syne',sans-serif}
+
+    /* Noise texture overlay */
+    body::before{
+      content:'';position:fixed;inset:0;z-index:9999;
+      pointer-events:none;
+      opacity:0.03;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1.25rem 2rem;
+      mix-blend-mode:difference;
+    }
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;text-transform:uppercase;letter-spacing:0.05em;color:#fff}
+    .nav-links{display:flex;gap:1.5rem;list-style:none}
+    .nav-links a{font-size:0.85rem;font-weight:500;color:#fff;text-decoration:none;letter-spacing:0.02em}
+    .nav-links a:hover{text-decoration:underline}
+
+    .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+
+    /* Hero */
+    #hero{
+      min-height:100vh;
+      display:flex;align-items:flex-end;
+      padding:8rem 0 4rem;
+      position:relative;
+    }
+    .hero-marquee{
+      position:absolute;top:50%;left:0;right:0;
+      transform:translateY(-50%);
+      font-family:'Syne',sans-serif;
+      font-size:clamp(4rem,14vw,14rem);
+      font-weight:800;
+      line-height:0.9;
+      text-transform:uppercase;
+      color:var(--c-ink);
+      opacity:0.06;
+      white-space:nowrap;
+      overflow:hidden;
+      pointer-events:none;
+      user-select:none;
+    }
+    .hero-marquee span{display:inline-block;animation:marquee 20s linear infinite}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .hero-content{position:relative;z-index:1}
+    .hero-label{
+      display:inline-block;
+      background:var(--c-orange);color:#fff;
+      padding:0.3rem 0.75rem;
+      font-size:0.75rem;font-weight:600;text-transform:uppercase;
+      transform:rotate(-2deg);
+      margin-bottom:1.5rem;
+    }
+    .hero-name{
+      font-family:'Syne',sans-serif;
+      font-size:clamp(3.5rem,9vw,8rem);
+      font-weight:800;line-height:0.95;
+      letter-spacing:-0.04em;
+      margin-bottom:1rem;
+    }
+    .hero-name .highlight{
+      color:var(--c-pink);
+      position:relative;
+    }
+    .hero-name .highlight::after{
+      content:'';position:absolute;bottom:0.1em;left:-0.1em;right:-0.1em;
+      height:0.15em;background:var(--c-orange);opacity:0.4;z-index:-1;
+    }
+    .hero-tagline{
+      font-size:clamp(1.1rem,2.5vw,1.5rem);
+      color:var(--c-gray);max-width:500px;
+      margin-bottom:2rem;font-weight:300;
+    }
+    .hero-stats-row{display:flex;gap:2.5rem;flex-wrap:wrap}
+    .hstat{display:flex;flex-direction:column;gap:0.2rem}
+    .hstat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:700;color:var(--c-purple)}
+    .hstat-label{font-size:0.75rem;color:var(--c-gray);text-transform:uppercase;letter-spacing:0.1em}
+
+    /* Sections */
+    section{padding:5rem 0}
+    .section-tag{
+      display:inline-block;
+      font-family:'Syne',sans-serif;font-size:0.8rem;font-weight:700;
+      text-transform:uppercase;letter-spacing:0.12em;
+      padding-bottom:0.3rem;
+      border-bottom:3px solid var(--c-orange);
+      margin-bottom:1rem;
+    }
+    .section-title{
+      font-family:'Syne',sans-serif;
+      font-size:clamp(2rem,5vw,3.5rem);
+      font-weight:700;letter-spacing:-0.03em;
+      line-height:1.1;
+      margin-bottom:1.5rem;
+    }
+
+    /* About */
+    #about{background:var(--c-ink);color:#fff;position:relative}
+    #about .section-tag{border-color:var(--c-blue)}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+    .about-text{font-size:1.15rem;color:#b0b8c4;line-height:1.8;font-weight:300}
+    .about-text strong{color:#fff;font-weight:600}
+    .about-img{
+      width:100%;aspect-ratio:4/5;
+      background:linear-gradient(135deg,var(--c-purple),var(--c-pink));
+      border-radius:2rem;
+      display:flex;align-items:flex-end;padding:2rem;
+      position:relative;overflow:hidden;
+    }
+    .about-img span{
+      font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;
+      color:rgba(255,255,255,0.2);line-height:1;
+    }
+
+    /* Experience */
+    .exp-cards{display:flex;flex-direction:column;gap:1.5rem}
+    .exp-card{
+      display:grid;grid-template-columns:180px 1fr;gap:2rem;
+      padding:2rem;
+      background:#fff;
+      border:2px solid var(--c-ink);
+      border-radius:1rem;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .exp-card:hover{transform:translateY(-4px);box-shadow:8px 8px 0 var(--c-ink)}
+    .exp-period{font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:600;color:var(--c-orange)}
+    .exp-role{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:0.25rem}
+    .exp-company{font-size:0.95rem;color:var(--c-gray);margin-bottom:0.75rem}
+    .exp-desc{font-size:0.95rem;color:#4b5563;line-height:1.6}
+    .exp-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem}
+    .exp-tag{font-size:0.72rem;padding:0.25rem 0.6rem;background:var(--c-cream);border-radius:4px;font-weight:500}
+
+    /* Skills bars */
+    .skills-wrapper{display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+    .skill-bar{margin-bottom:1.5rem}
+    .skill-bar-header{display:flex;justify-content:space-between;margin-bottom:0.4rem}
+    .skill-bar-name{font-weight:500;font-size:0.9rem}
+    .skill-bar-val{font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem}
+    .skill-bar-track{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+    .skill-bar-fill{height:100%;border-radius:4px;transition:width 1s ease-out}
+
+    /* Contact */
+    #contact{background:var(--c-ink);color:#fff;text-align:center;padding:6rem 0}
+    .contact-cta{
+      font-family:'Syne',sans-serif;
+      font-size:clamp(2rem,5vw,4rem);
+      font-weight:800;
+      line-height:1.1;
+      margin-bottom:1.5rem;
+    }
+    .contact-cta .hi{color:var(--c-orange)}
+    .contact-email{
+      display:inline-block;
+      font-size:clamp(1rem,2.5vw,1.5rem);
+      color:var(--c-blue);
+      text-decoration:none;
+      border-bottom:2px solid var(--c-blue);
+      padding-bottom:0.2rem;
+      margin-bottom:2rem;
+      transition:color .3s;
+    }
+    .contact-email:hover{color:var(--c-pink);border-color:var(--c-pink)}
+    .socials{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+    .social{
+      padding:0.6rem 1.2rem;
+      border:2px solid rgba(255,255,255,0.2);
+      border-radius:100px;color:#fff;
+      text-decoration:none;font-size:0.85rem;
+      transition:background .3s,border-color .3s;
+    }
+    .social:hover{background:#fff;color:var(--c-ink);border-color:#fff}
+
+    footer{padding:2rem;text-align:center;font-size:0.8rem;color:var(--c-gray)}
+
+    @media(max-width:768px){
+      .about-grid{grid-template-columns:1fr;gap:2rem}
+      .skills-wrapper{grid-template-columns:1fr}
+      .exp-card{grid-template-columns:1fr;gap:1rem}
+      .hero-stats-row{gap:1.5rem}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">AM</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Work</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-marquee"><span>Creative Technologist · Product Designer · Full Stack Dev · Creative Technologist · Product Designer · Full Stack Dev · </span></div>
+  <div class="container hero-content">
+    <div class="hero-label">Available for hire</div>
+    <h1 class="hero-name">Alex<br><span class="highlight">Morgan</span></h1>
+    <p class="hero-tagline">I design bold digital products and build them with code. Based in San Francisco, working worldwide.</p>
+    <div class="hero-stats-row">
+      <div class="hstat"><span class="hstat-num">8+</span><span class="hstat-label">Years</span></div>
+      <div class="hstat"><span class="hstat-num">50+</span><span class="hstat-label">Shipped</span></div>
+      <div class="hstat"><span class="hstat-num">40M</span><span class="hstat-label">Reached</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-tag">About</div>
+        <h2 class="section-title">Not your average<br>designer-developer.</h2>
+        <p>I believe <strong>great products are born at the intersection of design and engineering</strong>. That's why I never chose one — I do both. From design systems at Stripe to early engineering at Vercel, I've worn both hats and learned to speak both languages.</p>
+        <p style="margin-top:1rem">When I'm not shipping, I'm exploring creative coding, generative art, and the future of human-computer interaction.</p>
+      </div>
+      <div class="about-img"><span>AM</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="container">
+    <div class="section-tag">Experience</div>
+    <h2 class="section-title">Where I've<br>made impact</h2>
+    <div class="exp-cards">
+      <div class="exp-card">
+        <div class="exp-period">2022 — Present</div>
+        <div>
+          <div class="exp-role">Senior Product Designer</div>
+          <div class="exp-company">Stripe · San Francisco</div>
+          <div class="exp-desc">Led developer dashboard redesign for 4M+ users. Built internal design system adopted across 200+ product surfaces. Reduced onboarding time by 92%.</div>
+          <div class="exp-tags"><span class="exp-tag">Design Systems</span><span class="exp-tag">Product Strategy</span><span class="exp-tag">UX Research</span></div>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-period">2020 — 2022</div>
+        <div>
+          <div class="exp-role">Design Engineer</div>
+          <div class="exp-company">Figma · San Francisco</div>
+          <div class="exp-desc">Founding member of Design Infrastructure team. Shipped FigJam widget system and interaction patterns still used by millions daily.</div>
+          <div class="exp-tags"><span class="exp-tag">React</span><span class="exp-tag">TypeScript</span><span class="exp-tag">Design Infra</span></div>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-period">2018 — 2020</div>
+        <div>
+          <div class="exp-role">Frontend Engineer & Designer</div>
+          <div class="exp-company">Vercel · Remote</div>
+          <div class="exp-desc">Employee #14. Built marketing site and deployment UI. Helped grow from 50K to 500K users. Established early design culture.</div>
+          <div class="exp-tags"><span class="exp-tag">Next.js</span><span class="exp-tag">Growth</span><span class="exp-tag">Branding</span></div>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-period">2016 — 2018</div>
+        <div>
+          <div class="exp-role">Product Designer</div>
+          <div class="exp-company">Linear · Stockholm</div>
+          <div class="exp-desc">First design hire. Shaped core product from zero to launch. Created the command palette interaction that became Linear's signature.</div>
+          <div class="exp-tags"><span class="exp-tag">0→1</span><span class="exp-tag">Interaction Design</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <div class="section-tag">Skills</div>
+    <h2 class="section-title">Tools &<br>technologies</h2>
+    <div class="skills-wrapper">
+      <div>
+        <div class="skill-bar">
+          <div class="skill-bar-header"><span class="skill-bar-name">React / Next.js</span><span class="skill-bar-val">95%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:95%;background:var(--c-orange)"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-header"><span class="skill-bar-name">TypeScript</span><span class="skill-bar-val">92%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:92%;background:var(--c-pink)"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-header"><span class="skill-bar-name">Design Systems</span><span class="skill-bar-val">98%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:98%;background:var(--c-purple)"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-header"><span class="skill-bar-name">Figma</span><span class="skill-bar-val">96%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:96%;background:var(--c-blue)"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="skill-bar">
+          <div class="skill-bar-header"><span class="skill-bar-name">Node.js / Backend</span><span class="skill-bar-val">85%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:85%;background:var(--c-orange)"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-header"><span class="skill-bar-name">Motion / Animation</span><span class="skill-bar-val">88%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:88%;background:var(--c-pink)"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-header"><span class="skill-bar-name">User Research</span><span class="skill-bar-val">90%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:90%;background:var(--c-purple)"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-header"><span class="skill-bar-name">Creative Coding</span><span class="skill-bar-val">82%</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:82%;background:var(--c-blue)"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <h2 class="contact-cta">Got a project?<br>Let's talk. <span class="hi">Say hi →</span></h2>
+    <a href="mailto:alex@alexmorgan.io" class="contact-email">alex@alexmorgan.io</a>
+    <div class="socials">
+      <a href="#" class="social">GitHub</a>
+      <a href="#" class="social">LinkedIn</a>
+      <a href="#" class="social">Twitter</a>
+      <a href="#" class="social">Dribbble</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>© 2026 Alex Morgan · Built with HTML & CSS</p>
+  </div>
+</footer>
+
+<script>
+  // Animate skill bars on scroll
+  const skillBars = document.querySelectorAll('.skill-bar-fill');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        const targetWidth = bar.style.width;
+        bar.style.width = '0';
+        setTimeout(() => bar.style.width = targetWidth, 100);
+        observer.unobserve(bar);
+      }
+    });
+  }, {threshold: 0.5});
+  skillBars.forEach(bar => observer.observe(bar));
+</script>
+</body>
+</html>
