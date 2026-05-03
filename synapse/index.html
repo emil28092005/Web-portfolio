@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synapse — Living Intelligence</title>
+  <style>
+    :root {
+      --bg-deep:       #0a1a14;
+      --bg-teal:       #061a1a;
+      --accent-emerald:#00e676;
+      --accent-cyan:   #00bcd4;
+      --accent-mid:    #2cba74;
+      --text-primary:  #e8f5f0;
+      --text-secondary:#8fb8a8;
+      --text-dim:      #4a7060;
+      --border-dim:    rgba(0, 230, 118, 0.12);
+      --glow-emerald:  rgba(0, 230, 118, 0.18);
+      --glow-cyan:     rgba(0, 188, 212, 0.15);
+      --font-body:     'Georgia', 'Times New Roman', serif;
+      --font-ui:       system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --max-w:         860px;
+      --section-gap:   clamp(5rem, 10vw, 9rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: clamp(1rem, 1.1vw + 0.6rem, 1.15rem);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ── Canvas ── */
+    #neural-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Layout shell ── */
+    .page {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 5vw, 3rem);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.4rem clamp(1.25rem, 5vw, 3rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(10,26,20,0.9) 0%, transparent 100%);
+      backdrop-filter: blur(2px);
+    }
+
+    .nav-wordmark {
+      font-family: var(--font-ui);
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-emerald);
+      text-shadow: 0 0 18px rgba(0,230,118,0.5);
+    }
+
+    .nav-cta {
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-emerald);
+      border: 1px solid rgba(0,230,118,0.35);
+      padding: 0.55rem 1.2rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.25s, box-shadow 0.25s, color 0.25s;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-cta:hover, .nav-cta:focus-visible {
+      background: rgba(0,230,118,0.1);
+      box-shadow: 0 0 20px rgba(0,230,118,0.25);
+      outline: none;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8rem clamp(1.25rem, 5vw, 3rem) 5rem;
+    }
+
+    .hero-inner {
+      max-width: 680px;
+    }
+
+    .hero-label {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 2rem;
+      opacity: 0.85;
+    }
+
+    .hero-title {
+      font-family: var(--font-ui);
+      font-size: clamp(3.8rem, 10vw, 7.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 0.95;
+      margin-bottom: 1.8rem;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-emerald) 55%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(0,230,118,0.3));
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.05rem, 1.5vw + 0.6rem, 1.3rem);
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 3.2rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #021a10;
+      background: var(--accent-emerald);
+      padding: 1rem 2.4rem;
+      border-radius: 3px;
+      text-decoration: none;
+      min-height: 54px;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 0 30px rgba(0,230,118,0.35), 0 0 60px rgba(0,230,118,0.12);
+      animation: cta-breathe 3s ease-in-out infinite;
+    }
+
+    @keyframes cta-breathe {
+      0%, 100% { box-shadow: 0 0 30px rgba(0,230,118,0.35), 0 0 60px rgba(0,230,118,0.12); }
+      50%       { box-shadow: 0 0 45px rgba(0,230,118,0.55), 0 0 90px rgba(0,230,118,0.22); }
+    }
+
+    .hero-cta:hover, .hero-cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 50px rgba(0,230,118,0.5), 0 0 100px rgba(0,230,118,0.25);
+      outline: none;
+    }
+
+    .hero-cta:active { transform: translateY(0); }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: var(--section-gap) 0;
+    }
+
+    .section-label {
+      font-family: var(--font-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 2.4rem;
+      opacity: 0.75;
+    }
+
+    .section-title {
+      font-family: var(--font-ui);
+      font-size: clamp(1.7rem, 3vw + 0.8rem, 2.6rem);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: 2rem;
+    }
+
+    .section-divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent-emerald), transparent);
+      margin-bottom: 2.8rem;
+    }
+
+    /* ── WHAT IT IS ── */
+    #what {
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .what-body p {
+      color: var(--text-secondary);
+      margin-bottom: 1.4rem;
+    }
+
+    .what-body p:last-child { margin-bottom: 0; }
+
+    .what-body strong {
+      color: var(--text-primary);
+      font-weight: normal;
+      font-style: italic;
+    }
+
+    /* ── CAPABILITIES ── */
+    #capabilities {
+      background: linear-gradient(180deg, transparent 0%, rgba(6,26,26,0.6) 40%, rgba(6,26,26,0.6) 60%, transparent 100%);
+      border-top: 1px solid var(--border-dim);
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .cap-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .cap-item {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 0 1.6rem;
+      padding: 2.2rem 0;
+      border-bottom: 1px solid var(--border-dim);
+      align-items: start;
+      transition: background 0.2s;
+    }
+
+    .cap-item:last-child { border-bottom: none; }
+
+    .cap-item:hover {
+      background: rgba(0,230,118,0.03);
+    }
+
+    .cap-number {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent-emerald);
+      padding-top: 0.25rem;
+      opacity: 0.7;
+    }
+
+    .cap-content {}
+
+    .cap-title {
+      font-family: var(--font-ui);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.55rem;
+      letter-spacing: -0.01em;
+    }
+
+    .cap-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* ── PHILOSOPHY ── */
+    #philosophy {
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .philosophy-quote {
+      border-left: 3px solid transparent;
+      border-image: linear-gradient(to bottom, var(--accent-emerald), var(--accent-cyan), transparent) 1;
+      padding: 1.6rem 0 1.6rem 2.2rem;
+      margin: 2.8rem 0 0;
+      position: relative;
+    }
+
+    .philosophy-quote::before {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--accent-emerald) 0%, var(--accent-cyan) 60%, transparent 100%);
+      border-radius: 2px;
+      box-shadow: 0 0 12px rgba(0,230,118,0.4);
+    }
+
+    .philosophy-quote blockquote {
+      font-size: clamp(1.1rem, 1.5vw + 0.6rem, 1.35rem);
+      font-style: italic;
+      color: var(--text-primary);
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+    }
+
+    .philosophy-quote cite {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-mid);
+      font-style: normal;
+    }
+
+    .philosophy-body {
+      color: var(--text-secondary);
+      margin-top: 2.4rem;
+    }
+
+    /* ── CTA SECTION ── */
+    #cta-section {
+      border-top: 1px solid var(--border-dim);
+      text-align: center;
+    }
+
+    .cta-tagline {
+      color: var(--text-secondary);
+      margin-bottom: 2.6rem;
+      max-width: 460px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .email-form {
+      display: flex;
+      gap: 0;
+      max-width: 420px;
+      margin: 0 auto 1.2rem;
+      border: 1px solid rgba(0,230,118,0.25);
+      border-radius: 3px;
+      overflow: hidden;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .email-form:focus-within {
+      border-color: rgba(0,230,118,0.6);
+      box-shadow: 0 0 24px rgba(0,230,118,0.15);
+    }
+
+    .email-input {
+      flex: 1;
+      background: rgba(0,230,118,0.04);
+      border: none;
+      padding: 0.9rem 1.2rem;
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      outline: none;
+      min-height: 54px;
+    }
+
+    .email-input::placeholder { color: var(--text-dim); }
+
+    .email-submit {
+      background: var(--accent-emerald);
+      border: none;
+      padding: 0.9rem 1.4rem;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #021a10;
+      cursor: pointer;
+      min-height: 54px;
+      min-width: 44px;
+      transition: background 0.2s;
+    }
+
+    .email-submit:hover, .email-submit:focus-visible {
+      background: #33ff99;
+      outline: none;
+    }
+
+    .form-note {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.8rem 0;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-wordmark {
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-emerald);
+      opacity: 0.6;
+    }
+
+    .footer-copy {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── REDUCED MOTION ── */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-cta { animation: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .cap-item { grid-template-columns: 2.2rem 1fr; gap: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="neural-canvas" aria-hidden="true"></canvas>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav aria-label="Primary navigation">
+    <span class="nav-wordmark">Synapse</span>
+    <a class="nav-cta" href="#cta-section">Early Access</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" aria-labelledby="hero-heading">
+    <div class="hero-inner">
+      <p class="hero-label">Living Intelligence</p>
+      <h1 class="hero-title" id="hero-heading">Synapse</h1>
+      <p class="hero-tagline">
+        Not a tool that answers. An intelligence that grows — branching, learning, and adapting the way living neural tissue does.
+      </p>
+      <a class="hero-cta" href="#cta-section">Request Early Access</a>
+    </div>
+  </section>
+
+  <!-- WHAT IT IS -->
+  <section id="what" aria-labelledby="what-heading">
+    <div class="container">
+      <p class="section-label">What It Is</p>
+      <h2 class="section-title" id="what-heading">Intelligence that grows<br>like living tissue</h2>
+      <div class="section-divider"></div>
+      <div class="what-body">
+        <p>
+          Synapse is not a model you prompt and receive from. It is a <strong>continuously evolving cognitive system</strong> — one that forms associations the way neurons do, strengthening pathways through use, letting dormant ones decay, always reshaping the structure of its own understanding.
+        </p>
+        <p>
+          Where conventional AI retrieves patterns, Synapse <strong>develops them</strong>. It builds internal representations of context over time, treats every interaction as growth rather than transaction, and maintains a living model of the world that changes as the world changes. The result is an intelligence that does not merely know — it comprehends.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section id="capabilities" aria-labelledby="cap-heading">
+    <div class="container">
+      <p class="section-label">Capabilities</p>
+      <h2 class="section-title" id="cap-heading">Four properties<br>no static model has</h2>
+      <div class="section-divider"></div>
+      <div class="cap-grid">
+        <article class="cap-item">
+          <span class="cap-number" aria-hidden="true">01</span>
+          <div class="cap-content">
+            <h3 class="cap-title">Adaptive Pathway Reinforcement</h3>
+            <p class="cap-desc">
+              Frequently used reasoning paths strengthen over time. Rare ones thin and recede. Synapse builds a weighted graph of thought that reflects real experience, not a frozen training snapshot.
+            </p>
+          </div>
+        </article>
+        <article class="cap-item">
+          <span class="cap-number" aria-hidden="true">02</span>
+          <div class="cap-content">
+            <h3 class="cap-title">Contextual Memory Architecture</h3>
+            <p class="cap-desc">
+              Rather than holding a flat context window, Synapse maintains layered memory — immediate, associative, and deep — letting it reference the texture of long conversations without losing the thread.
+            </p>
+          </div>
+        </article>
+        <article class="cap-item">
+          <span class="cap-number" aria-hidden="true">03</span>
+          <div class="cap-content">
+            <h3 class="cap-title">Organic Uncertainty Modeling</h3>
+            <p class="cap-desc">
+              Synapse knows the difference between what it knows well and what it holds loosely. It communicates that gradient — not as a disclaimer, but as a natural part of how it reasons aloud.
+            </p>
+          </div>
+        </article>
+        <article class="cap-item">
+          <span class="cap-number" aria-hidden="true">04</span>
+          <div class="cap-content">
+            <h3 class="cap-title">Relational World Modeling</h3>
+            <p class="cap-desc">
+              Concepts inside Synapse do not exist in isolation. They are connected, weighted, and alive to each other. Ask it about one thing and it draws on a whole web of adjacent understanding without being told to.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section id="philosophy" aria-labelledby="phil-heading">
+    <div class="container">
+      <p class="section-label">Philosophy</p>
+      <h2 class="section-title" id="phil-heading">Intelligence should live,<br>not just execute</h2>
+      <div class="section-divider"></div>
+      <div class="philosophy-quote">
+        <blockquote>
+          "The brain does not process information; it grows it. Every thought leaves a physical trace — a pathway slightly more conductive than it was before. Understanding is not retrieved. It is cultivated."
+        </blockquote>
+        <cite>On the architecture of Synapse</cite>
+      </div>
+      <p class="philosophy-body">
+        We built Synapse from a conviction that the dominant metaphor for AI — the lookup table, the search engine, the statistical mouth — is not just limiting but wrong. Intelligence in nature is not a function from input to output. It is a living structure that changes shape as it encounters the world. We wanted to build something closer to that.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta-section" aria-labelledby="cta-heading">
+    <div class="container">
+      <p class="section-label">Early Access</p>
+      <h2 class="section-title" id="cta-heading">Join the first wave</h2>
+      <div class="section-divider"></div>
+      <p class="cta-tagline">
+        Synapse is in closed development. Leave your address and we will reach out when a place opens.
+      </p>
+      <form class="email-form" onsubmit="handleSubmit(event)" novalidate aria-label="Early access request">
+        <label for="email-input" class="sr-only">Email address</label>
+        <input
+          id="email-input"
+          class="email-input"
+          type="email"
+          name="email"
+          placeholder="your@address.com"
+          autocomplete="email"
+          required
+          aria-required="true"
+        />
+        <button class="email-submit" type="submit">Request</button>
+      </form>
+      <p class="form-note" role="status" id="form-status">No noise. One message when your place is ready.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-wordmark">Synapse</span>
+        <span class="footer-copy">2026 Synapse. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /.page -->
+
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<script>
+/* ─────────────────────────────────────────────
+   Neural Canvas Animation
+───────────────────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('neural-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* palette */
+  const C = {
+    bg:      '#0a1a14',
+    emerald: [0,  230, 118],
+    cyan:    [0,  188, 212],
+    mid:     [44, 186, 116],
+  };
+
+  /* ── resize ── */
+  let W, H;
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  /* ── Node ── */
+  class Node {
+    constructor() { this.reset(true); }
+
+    reset(init) {
+      this.x  = Math.random() * W;
+      this.y  = Math.random() * H;
+      /* organic drift — slow, curved, non-uniform */
+      this.vx = (Math.random() - 0.5) * 0.28;
+      this.vy = (Math.random() - 0.5) * 0.28;
+      /* base radius and breathing phase */
+      this.r     = 1.8 + Math.random() * 3.2;
+      this.phase = Math.random() * Math.PI * 2;
+      this.speed = 0.008 + Math.random() * 0.014;
+      /* colour — mostly emerald, occasional cyan */
+      this.col   = Math.random() < 0.72 ? C.emerald : C.cyan;
+      /* pulse brightness */
+      this.bright = 0.4 + Math.random() * 0.6;
+      /* organic wander */
+      this.wx  = Math.random() * 1000;
+      this.wy  = Math.random() * 1000 + 500;
+    }
+
+    update(t) {
+      /* subtle Perlin-like wander via sin sums */
+      const ox = Math.sin(this.wx + t * 0.0003) * 0.12 + Math.sin(this.wx * 1.7 + t * 0.00017) * 0.07;
+      const oy = Math.cos(this.wy + t * 0.00025) * 0.12 + Math.cos(this.wy * 1.4 + t * 0.0002) * 0.07;
+      this.x  += this.vx + ox;
+      this.y  += this.vy + oy;
+
+      /* wrap with soft margin */
+      const m = 60;
+      if (this.x < -m) this.x = W + m;
+      if (this.x > W + m) this.x = -m;
+      if (this.y < -m) this.y = H + m;
+      if (this.y > H + m) this.y = -m;
+    }
+
+    currentR(t) {
+      /* breathing: radius gently oscillates */
+      return this.r * (0.82 + 0.18 * Math.sin(this.phase + t * this.speed));
+    }
+
+    currentAlpha(t) {
+      return this.bright * (0.55 + 0.45 * Math.sin(this.phase * 1.3 + t * this.speed * 0.8));
+    }
+
+    draw(t) {
+      const r = this.currentR(t);
+      const a = this.currentAlpha(t);
+      const [R, G, B] = this.col;
+
+      /* outer glow */
+      const grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 4.5);
+      grd.addColorStop(0,   `rgba(${R},${G},${B},${(a * 0.9).toFixed(3)})`);
+      grd.addColorStop(0.4, `rgba(${R},${G},${B},${(a * 0.22).toFixed(3)})`);
+      grd.addColorStop(1,   `rgba(${R},${G},${B},0)`);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r * 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+
+      /* core */
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${R},${G},${B},${Math.min(a * 1.4, 1).toFixed(3)})`;
+      ctx.fill();
+    }
+  }
+
+  /* ── Connection pulse ── */
+  class Pulse {
+    constructor(ax, ay, bx, by, col) {
+      this.ax = ax; this.ay = ay;
+      this.bx = bx; this.by = by;
+      this.col = col;
+      this.t   = 0; /* 0→1 travel progress */
+      this.spd = 0.004 + Math.random() * 0.006;
+      this.r   = 1.2 + Math.random() * 1.6;
+      this.done = false;
+    }
+    update() {
+      this.t += this.spd;
+      if (this.t >= 1) this.done = true;
+    }
+    draw() {
+      const px = this.ax + (this.bx - this.ax) * this.t;
+      const py = this.ay + (this.by - this.ay) * this.t;
+      const alpha = Math.sin(this.t * Math.PI) * 0.9;
+      const [R,G,B] = this.col;
+      const grd = ctx.createRadialGradient(px, py, 0, px, py, this.r * 3);
+      grd.addColorStop(0,  `rgba(${R},${G},${B},${alpha.toFixed(3)})`);
+      grd.addColorStop(0.5,`rgba(${R},${G},${B},${(alpha*0.3).toFixed(3)})`);
+      grd.addColorStop(1,  `rgba(${R},${G},${B},0)`);
+      ctx.beginPath();
+      ctx.arc(px, py, this.r * 3, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+    }
+  }
+
+  /* ── populate ── */
+  const NODE_COUNT = prefersReduced ? 0 : Math.min(Math.floor(W * H / 14000), 80);
+  const nodes  = Array.from({ length: NODE_COUNT }, () => new Node());
+  const pulses = [];
+
+  const CONNECT_DIST  = 180;
+  const CONNECT_DIST2 = CONNECT_DIST * CONNECT_DIST;
+
+  let lastPulseTime = 0;
+
+  /* ── main loop ── */
+  let animId;
+  function frame(t) {
+    animId = requestAnimationFrame(frame);
+
+    /* clear */
+    ctx.clearRect(0, 0, W, H);
+
+    /* background gradient — subtle depth */
+    const bg = ctx.createRadialGradient(W * 0.5, H * 0.38, 0, W * 0.5, H * 0.5, Math.max(W, H) * 0.75);
+    bg.addColorStop(0,   'rgba(10,28,20,0.96)');
+    bg.addColorStop(0.55,'rgba(8,22,18,0.98)');
+    bg.addColorStop(1,   'rgba(6,18,18,1)');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    /* update nodes */
+    nodes.forEach(n => n.update(t));
+
+    /* draw connections */
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 > CONNECT_DIST2) continue;
+
+        const dist   = Math.sqrt(d2);
+        const frac   = 1 - dist / CONNECT_DIST;
+        /* blend colours toward average of the two nodes */
+        const [R1,G1,B1] = a.col;
+        const [R2,G2,B2] = b.col;
+        const R = Math.round((R1+R2)/2);
+        const G = Math.round((G1+G2)/2);
+        const B = Math.round((B1+B2)/2);
+
+        const aA = a.currentAlpha(t);
+        const aB = b.currentAlpha(t);
+        const lineAlpha = frac * frac * 0.35 * Math.min(aA, aB) * 1.6;
+
+        /* organic thickness — thicker near midpoint */
+        const midPulse = 0.5 + 0.5 * Math.sin(t * 0.0008 + i * 0.4 + j * 0.17);
+        const lw = (0.4 + frac * 1.6) * (0.7 + 0.3 * midPulse);
+
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+
+        /* slight organic curve via quadratic — control point displaced perpendicularly */
+        const mx  = (a.x + b.x) * 0.5;
+        const my  = (a.y + b.y) * 0.5;
+        const perp = Math.sin(t * 0.0005 + i * 0.7 + j * 0.3) * dist * 0.08;
+        const nx  = -dy / dist;
+        const ny  =  dx / dist;
+        ctx.quadraticCurveTo(mx + nx * perp, my + ny * perp, b.x, b.y);
+
+        ctx.strokeStyle = `rgba(${R},${G},${B},${lineAlpha.toFixed(3)})`;
+        ctx.lineWidth   = lw;
+        ctx.stroke();
+      }
+    }
+
+    /* spawn pulses */
+    if (t - lastPulseTime > 220 && nodes.length > 1) {
+      lastPulseTime = t;
+      /* pick two nearby nodes */
+      const a = nodes[Math.floor(Math.random() * nodes.length)];
+      const candidates = nodes.filter(n => {
+        if (n === a) return false;
+        const dx = n.x - a.x, dy = n.y - a.y;
+        return dx*dx + dy*dy < CONNECT_DIST2;
+      });
+      if (candidates.length) {
+        const b = candidates[Math.floor(Math.random() * candidates.length)];
+        pulses.push(new Pulse(a.x, a.y, b.x, b.y, Math.random() < 0.6 ? C.emerald : C.cyan));
+      }
+    }
+
+    /* update + draw pulses */
+    for (let i = pulses.length - 1; i >= 0; i--) {
+      pulses[i].update();
+      pulses[i].draw();
+      if (pulses[i].done) pulses.splice(i, 1);
+    }
+
+    /* draw nodes on top */
+    nodes.forEach(n => n.draw(t));
+  }
+
+  if (!prefersReduced) {
+    requestAnimationFrame(frame);
+  } else {
+    /* static dim background only */
+    ctx.fillStyle = C.bg;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  /* pause when tab hidden */
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) cancelAnimationFrame(animId);
+    else requestAnimationFrame(frame);
+  });
+})();
+
+/* ── Form ── */
+function handleSubmit(e) {
+  e.preventDefault();
+  const input  = document.getElementById('email-input');
+  const status = document.getElementById('form-status');
+  const val    = input.value.trim();
+  if (!val || !val.includes('@')) {
+    status.textContent = 'Please enter a valid email address.';
+    input.focus();
+    return;
+  }
+  status.textContent = 'Received. We will be in touch when your place opens.';
+  input.value = '';
+  input.disabled = true;
+  document.querySelector('.email-submit').disabled = true;
+}
+</script>
+
+</body>
+</html>

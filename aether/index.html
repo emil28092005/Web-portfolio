@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aether — AI that illuminates rather than replaces. Clarity as a form of consciousness.">
+  <title>Aether</title>
+  <style>
+    :root {
+      --bg-base:       #f8f9fa;
+      --bg-mid:        #eceff4;
+      --bg-soft:       #e8ecf0;
+      --gold:          #c9a96e;
+      --gold-light:    #d4a574;
+      --gold-pale:     #ede0ce;
+      --text-primary:  #1a1814;
+      --text-secondary:#4a4540;
+      --text-tertiary: #8a8078;
+      --border:        #ddd8d0;
+      --max-w:         720px;
+      --max-w-wide:    960px;
+      --serif:         'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+      --sans:          system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --ease:          cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    #canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    main { position: relative; z-index: 1; }
+
+    .section { padding: clamp(64px, 10vw, 120px) clamp(24px, 6vw, 48px); }
+    .container { max-width: var(--max-w); margin: 0 auto; }
+    .container--wide { max-width: var(--max-w-wide); margin: 0 auto; }
+
+    /* Hero */
+    #hero {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: clamp(80px, 12vw, 140px) clamp(24px, 6vw, 48px);
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, #ede8e0 0%, #eceff4 40%, #f8f9fa 100%);
+    }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(72px, 14vw, 128px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 0.95;
+      color: var(--text-primary);
+      margin-bottom: 36px;
+    }
+
+    .hero-title::after {
+      content: '';
+      display: block;
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      margin: 32px auto 0;
+      opacity: 0.7;
+    }
+
+    .hero-tagline {
+      font-family: var(--serif);
+      font-size: clamp(18px, 3vw, 24px);
+      font-style: italic;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      max-width: 560px;
+      margin-bottom: 56px;
+    }
+
+    .cta-primary {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-primary);
+      border: 1px solid var(--gold);
+      padding: 16px 40px;
+      min-height: 52px;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+    }
+
+    .cta-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: translateY(100%);
+      transition: transform 0.3s var(--ease);
+      z-index: -1;
+    }
+
+    .cta-primary:hover { color: #fff; }
+    .cta-primary:hover::before { transform: translateY(0); }
+    .cta-primary:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+      color: #fff;
+    }
+    .cta-primary:focus-visible::before { transform: translateY(0); }
+
+    /* Divider */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-label::after {
+      content: '';
+      display: block;
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      max-width: 48px;
+    }
+
+    /* What It Is */
+    #what { background: var(--bg-mid); }
+
+    .editorial-text { display: flex; flex-direction: column; gap: 28px; }
+
+    .editorial-text p {
+      font-family: var(--serif);
+      font-size: clamp(17px, 2.2vw, 20px);
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    .editorial-text p:first-child {
+      color: var(--text-primary);
+      font-size: clamp(19px, 2.6vw, 23px);
+    }
+
+    /* Capabilities */
+    #capabilities { background: var(--bg-base); }
+
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      margin-top: 48px;
+    }
+
+    .capability-item {
+      padding: 40px 40px 40px 0;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 20px;
+      align-items: start;
+      transition: background 0.3s var(--ease);
+    }
+
+    .capability-item:hover { background: var(--bg-mid); }
+
+    .capability-num {
+      font-family: var(--serif);
+      font-size: 13px;
+      color: var(--gold);
+      padding-top: 3px;
+      font-style: italic;
+    }
+
+    .capability-title {
+      font-family: var(--serif);
+      font-size: clamp(18px, 2.2vw, 21px);
+      font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .capability-desc {
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--text-tertiary);
+      line-height: 1.7;
+    }
+
+    /* Philosophy */
+    #philosophy { background: var(--bg-mid); }
+
+    .philosophy-quote {
+      border-left: 3px solid var(--gold);
+      padding: 32px 0 32px 48px;
+      margin: 48px 0;
+    }
+
+    .philosophy-quote blockquote {
+      font-family: var(--serif);
+      font-size: clamp(20px, 3vw, 28px);
+      font-style: italic;
+      color: var(--text-primary);
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+
+    .philosophy-quote cite {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .philosophy-body {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      margin-top: 48px;
+    }
+
+    .philosophy-body p {
+      font-family: var(--sans);
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 62ch;
+    }
+
+    /* CTA */
+    #cta-section { background: var(--bg-base); text-align: center; }
+
+    .cta-headline {
+      font-family: var(--serif);
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .cta-sub {
+      font-family: var(--sans);
+      font-size: 16px;
+      color: var(--text-tertiary);
+      margin-bottom: 48px;
+    }
+
+    .email-form {
+      display: flex;
+      max-width: 480px;
+      margin: 0 auto 16px;
+    }
+
+    .email-input {
+      flex: 1;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--text-primary);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-right: none;
+      padding: 14px 20px;
+      min-height: 52px;
+      outline: none;
+      transition: border-color 0.3s var(--ease);
+      -webkit-appearance: none;
+    }
+
+    .email-input::placeholder { color: var(--text-tertiary); }
+    .email-input:focus { border-color: var(--gold); }
+
+    .email-submit {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 14px 28px;
+      min-height: 52px;
+      min-width: 44px;
+      cursor: pointer;
+      transition: background 0.3s var(--ease);
+      -webkit-appearance: none;
+    }
+
+    .email-submit:hover { background: var(--gold-light); }
+    .email-submit:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+    .form-note {
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-mid);
+      padding: 40px clamp(24px, 6vw, 48px);
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      max-width: var(--max-w-wide);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--text-primary);
+    }
+
+    .footer-copy {
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.06em;
+    }
+
+    /* Accessibility */
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* Fade-in */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .capability-item { padding: 32px 0; }
+      .philosophy-quote { padding-left: 28px; }
+      .email-form { flex-direction: column; }
+      .email-input { border-right: 1px solid var(--border); border-bottom: none; }
+      .email-input:focus { border-color: var(--gold); }
+      .email-submit { width: 100%; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      #canvas { display: none; }
+      .fade-in { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="canvas" aria-hidden="true"></canvas>
+
+  <main>
+
+    <section id="hero">
+      <div class="hero-inner">
+        <p class="hero-eyebrow">Artificial Intelligence</p>
+        <h1 class="hero-title">Aether</h1>
+        <p class="hero-tagline">Consciousness as light. Thought emerging from stillness, clarity from void.</p>
+        <a href="#cta-section" class="cta-primary">Begin the conversation</a>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="what" class="section">
+      <div class="container">
+        <p class="section-label">What It Is</p>
+        <div class="editorial-text fade-in">
+          <p>Aether is an intelligence that illuminates. Not a replacement for thought, but a medium through which thought becomes clearer &mdash; the way light through water reveals the depth that was always there.</p>
+          <p>Most tools amplify output. Aether amplifies understanding. It reads between the lines of what you ask and responds to what you mean &mdash; drawing on a capacity for nuance that most software cannot simulate and most search engines have never attempted. The result is not an answer. It is a direction.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="capabilities" class="section">
+      <div class="container--wide">
+        <p class="section-label">Capabilities</p>
+        <div class="capabilities-grid">
+
+          <div class="capability-item fade-in">
+            <span class="capability-num">I</span>
+            <div>
+              <h3 class="capability-title">Reasoning without shortcuts</h3>
+              <p class="capability-desc">Aether does not compress your question into a category. It follows your reasoning wherever it leads, holding contradiction and complexity without forcing resolution.</p>
+            </div>
+          </div>
+
+          <div class="capability-item fade-in">
+            <span class="capability-num">II</span>
+            <div>
+              <h3 class="capability-title">Language as precision instrument</h3>
+              <p class="capability-desc">Words chosen for what they mean, not what they approximate. Aether writes and responds with the economy of a craftsman &mdash; nothing surplus, nothing missing.</p>
+            </div>
+          </div>
+
+          <div class="capability-item fade-in">
+            <span class="capability-num">III</span>
+            <div>
+              <h3 class="capability-title">Synthesis across disciplines</h3>
+              <p class="capability-desc">Ideas do not respect the boundaries of fields. Aether draws connections across domains &mdash; philosophy and mathematics, biology and design &mdash; not as metaphor, but as structure.</p>
+            </div>
+          </div>
+
+          <div class="capability-item fade-in">
+            <span class="capability-num">IV</span>
+            <div>
+              <h3 class="capability-title">Presence in the long work</h3>
+              <p class="capability-desc">Not a query interface. A collaborator that remembers context, holds the thread, and understands that the most important question is often the one that follows the first.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="philosophy" class="section">
+      <div class="container">
+        <p class="section-label">Philosophy</p>
+
+        <div class="philosophy-quote fade-in">
+          <blockquote>
+            &ldquo;Light does not argue with darkness. It simply reveals what was always present &mdash; the shape of the room, the texture of the wall, the face you had forgotten you were looking for.&rdquo;
+          </blockquote>
+          <cite>On the nature of Aether</cite>
+        </div>
+
+        <div class="philosophy-body fade-in">
+          <p>We built Aether on the premise that intelligence, at its most useful, is not generative but illuminating. The answers you need are rarely absent from your mind &mdash; they are obscured by noise, by the wrong framing, by the fatigue of holding too many things at once.</p>
+          <p>Aether does not add to that burden. It reduces it. It takes the diffuse and makes it particular. It takes the inarticulate and finds the exact word. It does not replace the spark of your thought &mdash; it gives that spark the oxygen it needs to catch.</p>
+          <p>This is why we call it Aether. Not a network. Not a platform. The medium through which light travels.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="cta-section" class="section">
+      <div class="container">
+        <h2 class="cta-headline fade-in">Let clarity begin.</h2>
+        <p class="cta-sub fade-in">Early access. No commitment required.</p>
+        <form class="email-form fade-in" onsubmit="return false;" aria-label="Request early access">
+          <label for="email-input" class="visually-hidden">Email address</label>
+          <input
+            id="email-input"
+            class="email-input"
+            type="email"
+            name="email"
+            placeholder="your@address.com"
+            autocomplete="email"
+            required
+          >
+          <button type="submit" class="email-submit">Request access</button>
+        </form>
+        <p class="form-note fade-in">No data sold. No noise. Only signal.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-brand">Aether</span>
+      <span class="footer-copy">&copy; 2026 Aether AI. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    /* Canvas: golden light motes drifting upward */
+    (function () {
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+
+      var W, H, motes, raf;
+
+      var PALETTE = [
+        'rgba(212,165,116,',
+        'rgba(201,169,110,',
+        'rgba(230,195,145,',
+        'rgba(185,150,95,',
+        'rgba(218,180,130,',
+      ];
+
+      function rand(a, b) { return a + Math.random() * (b - a); }
+
+      function mkMote() {
+        var ba = rand(0.04, 0.22);
+        return {
+          x: rand(0, W), y: rand(H * 0.1, H * 1.05),
+          r: rand(1.2, 4.0),
+          vy: rand(0.18, 0.58), vx: rand(-0.06, 0.06),
+          drift: rand(0.003, 0.012) * (Math.random() < 0.5 ? 1 : -1),
+          phase: rand(0, Math.PI * 2),
+          pulseSpeed: rand(0.008, 0.022),
+          baseAlpha: ba,
+          glowR: rand(3.5, 10),
+          color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+        };
+      }
+
+      function resize() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width  = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width  = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.scale(dpr, dpr);
+        var count = Math.min(Math.floor((W * H) / 9000), 90);
+        motes = [];
+        for (var i = 0; i < count; i++) motes.push(mkMote());
+      }
+
+      function drawMote(m) {
+        m.phase += m.pulseSpeed;
+        var pulse = 0.5 + 0.5 * Math.sin(m.phase);
+        var a = m.baseAlpha * (0.6 + 0.4 * pulse);
+
+        var grd = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.glowR);
+        grd.addColorStop(0,   m.color + (a * 1.0).toFixed(3) + ')');
+        grd.addColorStop(0.4, m.color + (a * 0.45).toFixed(3) + ')');
+        grd.addColorStop(1,   m.color + '0)');
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.glowR, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = m.color + Math.min(a * 2.2, 0.6).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r * (0.7 + 0.3 * pulse), 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function tick() {
+        ctx.clearRect(0, 0, W, H);
+        for (var i = 0; i < motes.length; i++) {
+          var m = motes[i];
+          m.vx += m.drift;
+          if (Math.abs(m.vx) > 0.35) m.drift *= -1;
+          m.x += m.vx;
+          m.y -= m.vy;
+          if (m.y < -(m.glowR * 2))  { m.y = H + m.glowR * 2; m.x = rand(0, W); }
+          if (m.x < -20) m.x = W + 20;
+          if (m.x > W + 20) m.x = -20;
+          drawMote(m);
+        }
+        raf = requestAnimationFrame(tick);
+      }
+
+      resize();
+      window.addEventListener('resize', function () {
+        cancelAnimationFrame(raf);
+        resize();
+        raf = requestAnimationFrame(tick);
+      });
+      raf = requestAnimationFrame(tick);
+    })();
+
+    /* Scroll fade-in */
+    (function () {
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+      var els = document.querySelectorAll('.fade-in');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(function (el, i) {
+        el.style.transitionDelay = (i * 0.06) + 's';
+        io.observe(el);
+      });
+    })();
+  </script>
+
+</body>
+</html>
